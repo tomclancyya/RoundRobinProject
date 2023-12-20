@@ -104,6 +104,11 @@ node RoutingAPI/app.mjs 127.0.0.1:3000 127.0.0.1:3001 127.0.0.1:3002
 ```
 Where the parameters describe the list of SimpleAPI addresses.
 
+run test
+```plaintext
+node ./tests/app-test.mjs
+```
+
 ### MeshTool
 Facilitates the running of multiple SimpleApi instances and a single RoutingAPI instance.
 It use pm2 process manager, which help run multiple nodejs applications.
