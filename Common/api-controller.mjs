@@ -1,5 +1,3 @@
-import { ApiResponse } from '../SimpleAPI/models/api-response.mjs';
-
 export class ApiController {
 
   /**

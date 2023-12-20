@@ -25,9 +25,9 @@ function startServices() {
 
     // Define the configuration for each service
     const appConfig = {
-      script: '../SimpleAPI/app.mjs', // Update with the path to your Node.js application
+      script: '../SimpleAPI/app.mjs',
       name: appName,
-      exec_mode: 'cluster', // Run in cluster mode
+      exec_mode: 'cluster',
       instances: 1, // Number of instances (processes) per service,
       args: [portsSimpleAPI[i]],
     };

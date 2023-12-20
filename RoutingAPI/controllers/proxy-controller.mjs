@@ -2,7 +2,6 @@ import url from 'url';
 import http from 'http';
 import { Timer } from '../../Common/timer.mjs';
 import { DynamicWeightedRoundRobinBalancer } from '../models/round-robin-balancer.mjs';
-const targetHost = '127.0.0.1';  // Target server to redirect requests to
 
 export class ProxyController {
     /**
@@ -16,12 +15,10 @@ export class ProxyController {
         const { method, headers, url: reqUrl } = clientReq;
         const targetUrl = url.parse(reqUrl);
       
-        // Log the request
         console.log(`${method} ${reqUrl}`);
 
         let selectedServer = balancer.getNextServer()
-      
-        // Modify the target URL to point to the desired server
+
         targetUrl.host = selectedServer.hostName;
         targetUrl.port = selectedServer.port;
       
@@ -35,17 +32,16 @@ export class ProxyController {
         };
       
         timer.start()
-        // Create a new request to the target server
+
         const targetReq = http.request(options, (targetRes) => {
             let responseTime = timer.stop()
             
             //add average response time, it will help calculate server weight
            selectedServer.addResponseTime(responseTime)
 
-          // Log the response
-          console.log(`Received response from ${targetHost}:${targetUrl.port}`);
+          console.log(`Received response from ${targetUrl.host}:${targetUrl.port}`);
 
-          // mark server which processed the request
+          // add additional info for testing purposes
           targetRes.headers["routed-to-server-id"] = targetUrl.port
           targetRes.headers["servers-info"] = balancer.getInfo()
       

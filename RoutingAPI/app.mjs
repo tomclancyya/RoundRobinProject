@@ -18,7 +18,7 @@ const server = http.createServer((clientReq, clientRes) => {
 
 // Listen for incoming client requests on the specified port
 server.listen(port, () => {
-    // TODO: add rate limiter
+    // TODO: we can add rate limiter later
     console.log(`Proxy server is listening on port ${port}`);
 });
 

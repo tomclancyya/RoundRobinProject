@@ -60,7 +60,6 @@ export class DynamicWeightedRoundRobinBalancer {
       })
     }
 
-    //TODO: add healthy filter
     /**
      * 
      * @returns {ServerItem}
@@ -85,8 +84,7 @@ export class DynamicWeightedRoundRobinBalancer {
   
     updateWeights(server, responseTime) {
       // Update the weight based on the server's response time
-      // Adjust this logic based on your specific requirements
-      const maxWeight = 10; // Maximum allowed weight to prevent unbounded growth
+      const maxWeight = 10;
   
       // Proportional adjustment based on response time
       const adjustmentFactor = 1 / (responseTime + 1);
