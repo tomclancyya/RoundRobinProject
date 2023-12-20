@@ -22,7 +22,6 @@ export class ProxyController {
         targetUrl.host = selectedServer.hostName;
         targetUrl.port = selectedServer.port;
       
-        // Create options for the target server request
         const options = {
           host: targetUrl.hostname,
           port: targetUrl.port,
@@ -34,10 +33,10 @@ export class ProxyController {
         timer.start()
 
         const targetReq = http.request(options, (targetRes) => {
-            let responseTime = timer.stop()
+          let responseTime = timer.stop()
             
-            //add average response time, it will help calculate server weight
-           selectedServer.addResponseTime(responseTime)
+          //add response time, it will help calculate server weight for round robin
+          selectedServer.addResponseTime(responseTime)
 
           console.log(`Received response from ${targetUrl.host}:${targetUrl.port}`);
 
@@ -45,21 +44,16 @@ export class ProxyController {
           targetRes.headers["routed-to-server-id"] = targetUrl.port
           targetRes.headers["servers-info"] = balancer.getInfo()
       
-          // Copy the headers from the target server response to the client response
           clientRes.writeHead(targetRes.statusCode, targetRes.headers);
-      
-          // Pipe the data from the target server response to the client response
           targetRes.pipe(clientRes, {
             end: true
           });
         });
       
-        // Pipe the client request to the target server request
         clientReq.pipe(targetReq, {
           end: true
         });
       
-        // Handle errors
         targetReq.on('error', (err) => {
           console.error(`Error with target request: ${err.message}`);
           clientRes.writeHead(500, { 'Content-Type': 'text/plain' });

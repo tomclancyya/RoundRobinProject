@@ -24,7 +24,7 @@ server.listen(port, () => {
 
 // Read servers from command line arguments and create round robin balancer
 let servers = ServersUtil.getServersFromCmdParameters(config)
-let balancer = new DynamicWeightedRoundRobinBalancer(servers)
+let balancer = new DynamicWeightedRoundRobinBalancer(servers, config)
 
 // health check for servers
 let healthChecker = new HealthChecker(servers)

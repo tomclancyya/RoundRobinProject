@@ -1,4 +1,5 @@
 import { ServerItem } from "./server-item.mjs";
+import { config } from '../config/config.mjs';
 
 export class DynamicWeightedRoundRobinBalancer {
 
@@ -12,16 +13,18 @@ export class DynamicWeightedRoundRobinBalancer {
     roundRobinServersQueue = []
     currentServerIndex = 0
 
-    minWeight = 1
-    maxWeight = 5
+    minWeight = null
+    maxWeight = null
 
     /**
      * 
      * @param {[ServerItem]} servers   
+     * @param {config} config
      */
-    constructor(servers) {
-        
+    constructor(servers, config) {        
       this.servers = servers;
+      this.minWeight = config.minWeight;
+      this.maxWeight = config.maxWeight;
     }
 
     /**
@@ -36,7 +39,6 @@ export class DynamicWeightedRoundRobinBalancer {
         })
 
         const maxRespTime = Math.max(...listOfAverageRespTime);
-
         const minRespTime = Math.min(...listOfAverageRespTime);
 
         function interpolate(minOutput, maxOutput, minInput, maxInput, value) {
@@ -66,28 +68,22 @@ export class DynamicWeightedRoundRobinBalancer {
      */
     getNextServer() {
 
-        if (this.currentServerIndex + 1 >= this.getHealthyServersFromQueue().length) {            
-            this.roundRobinServersQueue = this.createServersQueueBasedOnWeight(this.servers)
-            this.currentServerIndex = 0
-        } else {
-            this.currentServerIndex++;
-        }
+      if (this.currentServerIndex + 1 >= this.getHealthyServersFromQueue().length) {            
+          this.roundRobinServersQueue = this.createServersQueueBasedOnWeight(this.servers)
+          this.currentServerIndex = 0
+      } else {
+          this.currentServerIndex++;
+      }
 
-        return this.getHealthyServersFromQueue()[this.currentServerIndex]
+      if (this.getHealthyServersFromQueue().length == 0)
+        throw "cannot find avaliable servers"
+
+      return this.getHealthyServersFromQueue()[this.currentServerIndex]
     }
 
     getInfo() {
       return this.servers.map((server) => {
         return server.port + ' w:' + server.weight + ' rt:' + server.getAverageResponseTime().toFixed(2)
       })
-    }
-  
-    updateWeights(server, responseTime) {
-      // Update the weight based on the server's response time
-      const maxWeight = 10;
-  
-      // Proportional adjustment based on response time
-      const adjustmentFactor = 1 / (responseTime + 1);
-      this.weights[server] = Math.min(maxWeight, this.weights[server] * adjustmentFactor);
     }
   }
