@@ -80,13 +80,18 @@ POST /api/get-points
 POST /api/get-health
 
 ### RoutingAPI
-Contains code for RoutingApi which send request to the instance of SimpleAPI, based on RR basis.
+The RoutingAPI contains code responsible for sending requests to instances of SimpleAPI based on a Round Robin (RR) basis.
+
+RoutingAPI has 3 main modules:
+1) RR mechanism. This module helps execute requests on the list of destination servers based on a round-robin basis.
+2) Weighted mechanusm. This module aids in marking services as either slow or fast, adjusting the RR round schedule accordingly.
+3) Health Check mechanism. This module helps detect problematic services and marks them as unhealthy.
 
 how to run
 ```plaintext
 node RoutingAPI/app.mjs 127.0.0.1:3000 127.0.0.1:3001 127.0.0.1:3002
 ```
-where parameters describe of the list of SimpleAPI addresses
+Where the parameters describe the list of SimpleAPI addresses.
 
 ### MeshTool
 Facilitates the running of multiple SimpleApi instances and a single RoutingAPI instance.
