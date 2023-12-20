@@ -7,7 +7,10 @@ The weight assigned to each server influences its call frequency.
 In each round, the RR module sets up a schedule based on the list of servers.
 
 For instance, consider servers A, B, and C with weights 1, 2, and 1, respectively. 
-In one round, the sequence of servers called would be A, B, B, C. 
+In one round, the sequence of servers called would be 
+```plaintext
+A, B, B, C.
+```
 If the weights remain unchanged, the next round will follow the same sequence.
 
 ### How would round robin API handle it if one of the application APIs goes down?
@@ -30,9 +33,9 @@ The weight signifies the number of calls allocated to each service in every RR r
 
 To test this application, there are functional tests available with various scenarios, including:
 
-- A scenario where a service experiences a slowdown.
-- A scenario where a service becomes unhealthy.
-- A scenario illustrating the order of services for the Round Robin (RR).
+- Scenario where service experiences a slowdown.
+- Scenario where a service becomes unhealthy.
+- Scenario illustrating the order of services for the Round Robin (RR).
 
 These tests are located in the file:
 
@@ -83,9 +86,12 @@ POST /api/get-health
 The RoutingAPI contains code responsible for sending requests to instances of SimpleAPI based on a Round Robin (RR) basis.
 
 RoutingAPI has 3 main modules:
-1) RR mechanism. This module helps execute requests on the list of destination servers based on a round-robin basis.
-2) Weighted mechanusm. This module aids in marking services as either slow or fast, adjusting the RR round schedule accordingly.
-3) Health Check mechanism. This module helps detect problematic services and marks them as unhealthy.
+1) ***RR mechanism.*** 
+This module helps execute requests on the list of destination servers based on a round-robin basis.
+2) ***Weighted mechanusm.*** 
+This module aids in marking services as either slow or fast, adjusting the RR round schedule accordingly.
+3) ***Health Check mechanism.*** 
+This module helps detect problematic services and marks them as unhealthy.
 
 #### Settings
 RoutingAPI/config/config.mjs 
@@ -94,9 +100,12 @@ RoutingAPI/config/config.mjs
   
   healthCheckInterval: 5,
 
-  ***how many response time logs should store for every server***
-  
+  ***how many response time logs should store for every server***  
   maxLogResponseTime: 3
+
+  ***weight settings for RR***
+  minWeight: 1
+  maxWeight: 3
 
 how to run
 ```plaintext
