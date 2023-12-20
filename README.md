@@ -59,3 +59,35 @@ servers-info: 3001 w:2 rt:6.60
 
 Where `routed-to-server-id` describes the port handling the request, and `servers-info` includes information about the port, its weight (`w`), and response time (`rt`).
 
+## Project information
+
+The project implemented with pure vanila JavaScript and Nodejs API without any externa libraries or language wrappers.
+
+### Common
+Contains common code, shared between SimpleAPI and RoutingAPI
+
+### SimpleAPI
+Contains code for simple api
+
+how to run
+```plaintext
+node SimpleAPI/app.mjs 3000
+```
+where 3000 is parameter which describes desired port
+
+APIs:
+POST /api/get-points
+POST /api/get-health
+
+### RoutingAPI
+Contains code for RoutingApi which send request to the instance of SimpleAPI, based on RR basis.
+
+how to run
+```plaintext
+node RoutingAPI/app.mjs 127.0.0.1:3000 127.0.0.1:3001 127.0.0.1:3002
+```
+where parameters describe of the list of SimpleAPI addresses
+
+### MeshTool
+Facilitates the running of multiple SimpleApi instances and a single RoutingAPI instance.
+
