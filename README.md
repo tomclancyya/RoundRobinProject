@@ -87,6 +87,17 @@ RoutingAPI has 3 main modules:
 2) Weighted mechanusm. This module aids in marking services as either slow or fast, adjusting the RR round schedule accordingly.
 3) Health Check mechanism. This module helps detect problematic services and marks them as unhealthy.
 
+#### Settings
+RoutingAPI/config/config.mjs 
+
+  ***check health of servers every {healthCheckInterval} seconds***
+  
+  healthCheckInterval: 5,
+
+  ***how many response time logs should store for every server***
+  
+  maxLogResponseTime: 3
+
 how to run
 ```plaintext
 node RoutingAPI/app.mjs 127.0.0.1:3000 127.0.0.1:3001 127.0.0.1:3002
@@ -95,4 +106,18 @@ Where the parameters describe the list of SimpleAPI addresses.
 
 ### MeshTool
 Facilitates the running of multiple SimpleApi instances and a single RoutingAPI instance.
+It use pm2 process manager, which help run multiple nodejs applications.
+
+how to run
+```plaintext
+node MeshTool/run-cluster.js 2
+```
+Where the parameter 2 describes amount of SimpleAPI instances.
+
+how to terminate cluster
+```plaintext
+pm2 delete all
+```
+
+
 
